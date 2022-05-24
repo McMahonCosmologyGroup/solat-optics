@@ -1,19 +1,19 @@
 import multiprocessing as mp
 import sys
-path_to_package = "/home/chesmore/Desktop/Code/solat-optics"
-sys.path.append(path_to_package) 
 
-import solat_optics.latrt_geo as latrt_geo
-from solat_optics.latrt_geo import *
+path_to_package = "/home/chesmore/Desktop/Code/solat-optics"
+sys.path.append(path_to_package)
 
 # Holosim packages
 import ap_fitting as afit
 import far_field as ff
+import numpy as np
 import pan_mod as pm
 from pan_mod import *
-
-import numpy as np
 from scipy import optimize
+
+import solat_optics.latrt_geo as latrt_geo
+from solat_optics.latrt_geo import *
 
 th2 = (-np.pi / 2) - initialize_telescope_geometry.th_2
 
@@ -21,9 +21,10 @@ y_cent_m1 = -7201.003729431267
 
 adj_pos_m1, adj_pos_m2 = pm.get_single_vert_adj_positions()
 
-class RayMirrorPts():
+
+class RayMirrorPts:
     def __init__(self, tele_geo, theta, phi, el, az):
-        theta,phi = np.meshgrid(theta, phi)
+        theta, phi = np.meshgrid(theta, phi)
         theta = np.ravel(theta)
         phi = np.ravel(phi)
 
@@ -36,15 +37,21 @@ class RayMirrorPts():
         Zf = np.where(r < 3600, Zf, np.nan)
         Xtf, Ytf, Ztf = foc_into_tele(X, Y, Zf, el, az)
         xf_mean = np.mean(
-            Xtf[int(len(Xtf) / 2), :][np.where(np.isnan(Xtf[int(len(Xtf) / 2), :]) != True)]
+            Xtf[int(len(Xtf) / 2), :][
+                np.where(np.isnan(Xtf[int(len(Xtf) / 2), :]) != True)
+            ]
         )
         yf_mean = np.mean(
-            Ytf[:, int(len(Ytf) / 2)][np.where(np.isnan(Ytf[:, int(len(Ytf) / 2)]) != True)]
+            Ytf[:, int(len(Ytf) / 2)][
+                np.where(np.isnan(Ytf[:, int(len(Ytf) / 2)]) != True)
+            ]
         )
         zf_mean = np.mean(
-            Ztf[:, int(len(Ytf) / 2)][np.where(np.isnan(Ytf[:, int(len(Ytf) / 2)]) != True)]
+            Ztf[:, int(len(Ytf) / 2)][
+                np.where(np.isnan(Ytf[:, int(len(Ytf) / 2)]) != True)
+            ]
         )
-        
+
         # output array
         n_pts = len(theta)
         out = np.zeros((9, n_pts))
@@ -61,40 +68,40 @@ class RayMirrorPts():
         self.n_pts = n_pts
         self.out = out
 
-#     def plot_setup(self):
-#         el = self.el
-#         az = self.az
+    #     def plot_setup(self):
+    #         el = self.el
+    #         az = self.az
 
-#         x = np.linspace(-4000,4000,100) # [mm]
-#         y = np.linspace(-4000,4000,100) # [mm]
-#         X,Y = np.meshgrid(x,y)
-#         r = np.sqrt(X**2 + Y**2)
-#         Z1 = z1(X,Y)
-#         Z1 = np.where(r<3600,Z1,np.nan)
+    #         x = np.linspace(-4000,4000,100) # [mm]
+    #         y = np.linspace(-4000,4000,100) # [mm]
+    #         X,Y = np.meshgrid(x,y)
+    #         r = np.sqrt(X**2 + Y**2)
+    #         Z1 = z1(X,Y)
+    #         Z1 = np.where(r<3600,Z1,np.nan)
 
-#         Xt1,Yt1,Zt1 = m1_into_tele(X,Y,Z1)
-#         X1,Y1,Z1 = rotate_az_el(Xt1[:,int(len(Yt1)/2)],Yt1[:,int(len(Yt1)/2)],Zt1[:,int(len(Yt1)/2)],el,az)
-#         plt.plot(Y1,Z1, linewidth=4, color = 'b')
+    #         Xt1,Yt1,Zt1 = m1_into_tele(X,Y,Z1)
+    #         X1,Y1,Z1 = rotate_az_el(Xt1[:,int(len(Yt1)/2)],Yt1[:,int(len(Yt1)/2)],Zt1[:,int(len(Yt1)/2)],el,az)
+    #         plt.plot(Y1,Z1, linewidth=4, color = 'b')
 
-#         x = np.linspace(-4000,4000,100) # [mm]
-#         y = np.linspace(-4000,4000,100) # [mm]
-#         X,Y = np.meshgrid(x,y)
-#         r = np.sqrt(X**2 + Y**2)
-#         Z2 = z2(X,Y)
-#         Z2 = np.where(r<3600,Z2,np.nan)
+    #         x = np.linspace(-4000,4000,100) # [mm]
+    #         y = np.linspace(-4000,4000,100) # [mm]
+    #         X,Y = np.meshgrid(x,y)
+    #         r = np.sqrt(X**2 + Y**2)
+    #         Z2 = z2(X,Y)
+    #         Z2 = np.where(r<3600,Z2,np.nan)
 
-#         Xt2,Yt2,Zt2 = m2_into_tele(X,Y,Z2)
-#         X2,Y2,Z2 = rotate_az_el(Xt2[:,int(len(Yt2)/2)],Yt2[:,int(len(Yt2)/2)],Zt2[:,int(len(Yt2)/2)],el,az)
-#         plt.plot(Y2,Z2, linewidth=4, color = 'b')
+    #         Xt2,Yt2,Zt2 = m2_into_tele(X,Y,Z2)
+    #         X2,Y2,Z2 = rotate_az_el(Xt2[:,int(len(Yt2)/2)],Yt2[:,int(len(Yt2)/2)],Zt2[:,int(len(Yt2)/2)],el,az)
+    #         plt.plot(Y2,Z2, linewidth=4, color = 'b')
 
-#         x = np.linspace(-4000,4000,100) # [mm]
-#         y = np.linspace(-4000,4000,100) # [mm]
-#         X,Y = np.meshgrid(x,y)
-#         r = np.sqrt(X**2 + Y**2)
-#         Zf = z_focal(X,Y)
-#         Zf = np.where(r<3600,Zf,np.nan)
-#         Xtf,Ytf,Ztf = foc_into_tele(X,Y,Zf,el,az)
-#         plt.plot(Ytf[:,int(len(Yt2)/2)],Ztf[:,int(len(Yt2)/2)], linewidth=4, color = 'b')
+    #         x = np.linspace(-4000,4000,100) # [mm]
+    #         y = np.linspace(-4000,4000,100) # [mm]
+    #         X,Y = np.meshgrid(x,y)
+    #         r = np.sqrt(X**2 + Y**2)
+    #         Zf = z_focal(X,Y)
+    #         Zf = np.where(r<3600,Zf,np.nan)
+    #         Xtf,Ytf,Ztf = foc_into_tele(X,Y,Zf,el,az)
+    #         plt.plot(Ytf[:,int(len(Yt2)/2)],Ztf[:,int(len(Yt2)/2)], linewidth=4, color = 'b')
 
     def trace_rays(self, ii):
         tele_geo = self.tele_geo
@@ -132,7 +139,7 @@ class RayMirrorPts():
 
             return zap - z_apt
 
-        d_0ap = np.sqrt(x_0**2 + (y_0+7200)**2 + (z_0-4000)**2)
+        d_0ap = np.sqrt(x_0 ** 2 + (y_0 + 7200) ** 2 + (z_0 - 4000) ** 2)
         lb = max(0, d_0ap - 0.5e5)
         ub = d_0ap + 0.5e5
         t_ap = optimize.brentq(root_ap, lb, ub)
@@ -141,10 +148,11 @@ class RayMirrorPts():
         y_a = y_0 + beta * t_ap
         z_a = z_0 + gamma * t_ap
         P_a = [x_a, y_a, z_a]
-        
+
         if x_a ** 2 + (y_a - y_cent_m1) ** 2 > 3e3 ** 2:
             return [0, 0, 0, 0, 0, 0]
         else:
+
             def root_z1(t):
 
                 # Endpoint of ray:
@@ -159,6 +167,7 @@ class RayMirrorPts():
                 z_m1 = z1(xm1, ym1)
 
                 return zm1 - z_m1
+
             # print(P_a)
             # x = np.linspace(0, 2e4, 200)
             # y = root_z1(x)
@@ -209,13 +218,21 @@ class RayMirrorPts():
             N_hat_t[2] = N_hat_y_temp * np.sin(th1) + N_hat_z_temp * np.cos(th1)
 
             tan_rx_m1_t = np.zeros(3)
-            tan_rx_m1_x_temp = tan_rx_m1[0] * np.cos(np.pi) + tan_rx_m1[2] * np.sin(np.pi)
+            tan_rx_m1_x_temp = tan_rx_m1[0] * np.cos(np.pi) + tan_rx_m1[2] * np.sin(
+                np.pi
+            )
             tan_rx_m1_y_temp = tan_rx_m1[1]
-            tan_rx_m1_z_temp = -tan_rx_m1[2] * np.sin(np.pi) + tan_rx_m1[2] * np.cos(np.pi)
+            tan_rx_m1_z_temp = -tan_rx_m1[2] * np.sin(np.pi) + tan_rx_m1[2] * np.cos(
+                np.pi
+            )
 
             tan_rx_m1_t[0] = tan_rx_m1_x_temp
-            tan_rx_m1_t[1] = tan_rx_m1_y_temp * np.cos(th1) - tan_rx_m1_z_temp * np.sin(th1)
-            tan_rx_m1_t[2] = tan_rx_m1_y_temp * np.sin(th1) + tan_rx_m1_z_temp * np.cos(th1)
+            tan_rx_m1_t[1] = tan_rx_m1_y_temp * np.cos(th1) - tan_rx_m1_z_temp * np.sin(
+                th1
+            )
+            tan_rx_m1_t[2] = tan_rx_m1_y_temp * np.sin(th1) + tan_rx_m1_z_temp * np.cos(
+                th1
+            )
 
             tan_og_t = np.zeros(3)
             tan_og_x_temp = tan_og[0] * np.cos(np.pi) - tan_og[1] * np.sin(np.pi)
@@ -267,8 +284,10 @@ class RayMirrorPts():
             return [x_m2, y_m2, z_m2, x_m1, y_m1, z_m1]
 
     def output(self):
-        if self.n_pts > 3000: # a threshold to use parallelism (it's a empirical number tested with Ryzen 5 3600)
-            pool = mp.Pool(max(1, mp.cpu_count()-1))
+        if (
+            self.n_pts > 3000
+        ):  # a threshold to use parallelism (it's a empirical number tested with Ryzen 5 3600)
+            pool = mp.Pool(max(1, mp.cpu_count() - 1))
             # result = list(pool.imap(self.trace_rays, range(self.n_pts)))
             result = pool.map(self.trace_rays, range(self.n_pts))
             pool.close()
@@ -280,6 +299,7 @@ class RayMirrorPts():
 
         self.out[0:6] = np.array(result).transpose()
         return self.out
+
 
 def ray_mirror_pts(tele_geo, theta, phi, el, az):
     color = "c"
@@ -466,61 +486,61 @@ def ray_mirror_pts(tele_geo, theta, phi, el, az):
 
         t_m2 = optimize.brentq(root_z2, 0, 20e3)
 
-#         if np.mod(ii,30)==0:
+        #         if np.mod(ii,30)==0:
 
-#             x = np.linspace(-4000,4000,100) # [mm]
-#             y = np.linspace(-4000,4000,100) # [mm]
-#             X,Y = np.meshgrid(x,y)
-#             r = np.sqrt(X**2 + Y**2)
-#             Z1 = z1(X,Y)
-#             Z1 = np.where(r<3600,Z1,np.nan)
+        #             x = np.linspace(-4000,4000,100) # [mm]
+        #             y = np.linspace(-4000,4000,100) # [mm]
+        #             X,Y = np.meshgrid(x,y)
+        #             r = np.sqrt(X**2 + Y**2)
+        #             Z1 = z1(X,Y)
+        #             Z1 = np.where(r<3600,Z1,np.nan)
 
-#             Xt1,Yt1,Zt1 = m1_into_tele(X,Y,Z1)
-#             X1,Y1,Z1 = rotate_az_el(Xt1[:,int(len(Yt1)/2)],Yt1[:,int(len(Yt1)/2)],Zt1[:,int(len(Yt1)/2)],el,az)
-#             plt.plot(Y1,Z1,color = 'b')
+        #             Xt1,Yt1,Zt1 = m1_into_tele(X,Y,Z1)
+        #             X1,Y1,Z1 = rotate_az_el(Xt1[:,int(len(Yt1)/2)],Yt1[:,int(len(Yt1)/2)],Zt1[:,int(len(Yt1)/2)],el,az)
+        #             plt.plot(Y1,Z1,color = 'b')
 
-#             x = np.linspace(-4000,4000,100) # [mm]
-#             y = np.linspace(-4000,4000,100) # [mm]
-#             X,Y = np.meshgrid(x,y)
-#             r = np.sqrt(X**2 + Y**2)
-#             Z2 = z2(X,Y)
-#             Z2 = np.where(r<3600,Z2,np.nan)
+        #             x = np.linspace(-4000,4000,100) # [mm]
+        #             y = np.linspace(-4000,4000,100) # [mm]
+        #             X,Y = np.meshgrid(x,y)
+        #             r = np.sqrt(X**2 + Y**2)
+        #             Z2 = z2(X,Y)
+        #             Z2 = np.where(r<3600,Z2,np.nan)
 
-#             Xt2,Yt2,Zt2 = m2_into_tele(X,Y,Z2)
-#             X2,Y2,Z2 = rotate_az_el(Xt2[:,int(len(Yt2)/2)],Yt2[:,int(len(Yt2)/2)],Zt2[:,int(len(Yt2)/2)],el,az)
-#             plt.plot(Y2,Z2,color = 'b')
+        #             Xt2,Yt2,Zt2 = m2_into_tele(X,Y,Z2)
+        #             X2,Y2,Z2 = rotate_az_el(Xt2[:,int(len(Yt2)/2)],Yt2[:,int(len(Yt2)/2)],Zt2[:,int(len(Yt2)/2)],el,az)
+        #             plt.plot(Y2,Z2,color = 'b')
 
-#             x = np.linspace(-4000,4000,100) # [mm]
-#             y = np.linspace(-4000,4000,100) # [mm]
-#             X,Y = np.meshgrid(x,y)
-#             r = np.sqrt(X**2 + Y**2)
-#             Zf = z_focal(X,Y)
-#             Zf = np.where(r<3600,Zf,np.nan)
-#             Xtf,Ytf,Ztf = foc_into_tele(X,Y,Zf,el,az)
-#             plt.plot(Ytf[:,int(len(Yt2)/2)],Ztf[:,int(len(Yt2)/2)],color = 'b')
+        #             x = np.linspace(-4000,4000,100) # [mm]
+        #             y = np.linspace(-4000,4000,100) # [mm]
+        #             X,Y = np.meshgrid(x,y)
+        #             r = np.sqrt(X**2 + Y**2)
+        #             Zf = z_focal(X,Y)
+        #             Zf = np.where(r<3600,Zf,np.nan)
+        #             Xtf,Ytf,Ztf = foc_into_tele(X,Y,Zf,el,az)
+        #             plt.plot(Ytf[:,int(len(Yt2)/2)],Ztf[:,int(len(Yt2)/2)],color = 'b')
 
-#             ### X #######
-#             x = np.linspace(-4000,4000,100) # [mm]
-#             y = np.linspace(-4000,4000,100) # [mm]
-#             X,Y = np.meshgrid(x,y)
-#             r = np.sqrt(X**2 + Y**2)
-#             Z1 = z1(X,Y)
-#             Z1 = np.where(r<3600,Z1,np.nan)
+        #             ### X #######
+        #             x = np.linspace(-4000,4000,100) # [mm]
+        #             y = np.linspace(-4000,4000,100) # [mm]
+        #             X,Y = np.meshgrid(x,y)
+        #             r = np.sqrt(X**2 + Y**2)
+        #             Z1 = z1(X,Y)
+        #             Z1 = np.where(r<3600,Z1,np.nan)
 
-#             Xt1,Yt1,Zt1 = m1_into_tele(X,Y,Z1)
-#             X1,Y1,Z1 = rotate_az_el(Xt1[int(len(Yt1)/2),:],Yt1[int(len(Yt1)/2),:],Zt1[int(len(Yt1)/2),:],el,az)
-#             plt.plot(X1,Y1,color = 'b')
+        #             Xt1,Yt1,Zt1 = m1_into_tele(X,Y,Z1)
+        #             X1,Y1,Z1 = rotate_az_el(Xt1[int(len(Yt1)/2),:],Yt1[int(len(Yt1)/2),:],Zt1[int(len(Yt1)/2),:],el,az)
+        #             plt.plot(X1,Y1,color = 'b')
 
-#             x = np.linspace(-4000,4000,100) # [mm]
-#             y = np.linspace(-4000,4000,100) # [mm]
-#             X,Y = np.meshgrid(x,y)
-#             r = np.sqrt(X**2 + Y**2)
-#             Z2 = z2(X,Y)
-#             Z2 = np.where(r<3600,Z2,np.nan)
+        #             x = np.linspace(-4000,4000,100) # [mm]
+        #             y = np.linspace(-4000,4000,100) # [mm]
+        #             X,Y = np.meshgrid(x,y)
+        #             r = np.sqrt(X**2 + Y**2)
+        #             Z2 = z2(X,Y)
+        #             Z2 = np.where(r<3600,Z2,np.nan)
 
-#             Xt2,Yt2,Zt2 = m2_into_tele(X,Y,Z2)
-#             X2,Y2,Z2 = rotate_az_el(Xt2[int(len(Yt2)/2),:],Yt2[int(len(Yt2)/2),:],Zt2[int(len(Yt2)/2),:],el,az)
-#             plt.plot(X2,Y2,color = 'b')
+        #             Xt2,Yt2,Zt2 = m2_into_tele(X,Y,Z2)
+        #             X2,Y2,Z2 = rotate_az_el(Xt2[int(len(Yt2)/2),:],Yt2[int(len(Yt2)/2),:],Zt2[int(len(Yt2)/2),:],el,az)
+        #             plt.plot(X2,Y2,color = 'b')
 
         # Endpoint of ray:
         x_m2 = x_m1 + alpha * t_m2
@@ -542,6 +562,7 @@ def ray_mirror_pts(tele_geo, theta, phi, el, az):
     out[8, 0] = zf_mean
 
     return out
+
 
 def aperature_fields_from_panel_model(
     panel_model1, panel_model2, tele_geo, theta, phi, rxmirror, el, az
@@ -945,17 +966,17 @@ def aperature_fields_from_panel_model(
 
                 total_path_length = t_ap + t_m1 + t_m2 + t_foc
 
-#                 if np.mod(ii,21)==0:
-#                     plt.plot([y_m1,P_a[1]],[z_m1,P_a[2]],color = color,alpha = alph)
-#                     plt.plot([y_a,y_0],[z_a,z_0],color = color,alpha = alph)
-#                     plt.plot([y_m2,y_m1],[z_m2,z_m1],color = color,alpha = alph)
-#                     plt.plot([y_m2,pos_ap[1]],[z_m2,pos_ap[2]],color = color,alpha = alph)
-#                     plt.plot([y_m2,y_foc],[z_m2,z_foc],color = color,alpha = alph)
-#                 if np.mod(ii,71)==0 :
-#                     plt.plot([x_m2,x_m1],[y_m2,y_m1],color = color,alpha = alph)
-#                     plt.plot([x_m2,x_foc],[y_m2,y_foc],color = color,alpha = alph)
-#                     plt.plot([y_m2,y_foc],[z_m2,z_foc],color = color,alpha = alph)
-#                     plt.plot([y_m2,y_m1],[z_m2,z_m1],color = color,alpha = alph)
+                #                 if np.mod(ii,21)==0:
+                #                     plt.plot([y_m1,P_a[1]],[z_m1,P_a[2]],color = color,alpha = alph)
+                #                     plt.plot([y_a,y_0],[z_a,z_0],color = color,alpha = alph)
+                #                     plt.plot([y_m2,y_m1],[z_m2,z_m1],color = color,alpha = alph)
+                #                     plt.plot([y_m2,pos_ap[1]],[z_m2,pos_ap[2]],color = color,alpha = alph)
+                #                     plt.plot([y_m2,y_foc],[z_m2,z_foc],color = color,alpha = alph)
+                #                 if np.mod(ii,71)==0 :
+                #                     plt.plot([x_m2,x_m1],[y_m2,y_m1],color = color,alpha = alph)
+                #                     plt.plot([x_m2,x_foc],[y_m2,y_foc],color = color,alpha = alph)
+                #                     plt.plot([y_m2,y_foc],[z_m2,z_foc],color = color,alpha = alph)
+                #                     plt.plot([y_m2,y_m1],[z_m2,z_m1],color = color,alpha = alph)
 
                 # Write out
                 out[0, ii] = x_m2

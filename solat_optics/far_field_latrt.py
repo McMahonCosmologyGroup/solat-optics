@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 path_to_package = "/home/chesmore/Desktop/Code/solat-optics"
-sys.path.append(path_to_package) 
+sys.path.append(path_to_package)
 import solat_optics.solat_apert_field as solat_apert_field
 
 sys.path.append("/home/chesmore/Desktop/Code/holosim_paper/package/holosim-ml")
@@ -29,15 +29,15 @@ def project_to_data(sim, data_x, data_y, tele_geo):
         yy = y_sim[ii]
 
         if np.max(data_x[0, :]) < np.max(xx) or np.max(data_y[:, 0]) < np.max(yy):
-#             if xx == np.min(xx):
-#                 print(np.max(data_x[0, :]), abs(xx))
+            #             if xx == np.min(xx):
+            #                 print(np.max(data_x[0, :]), abs(xx))
             # skipping over points in the grid that are outside of the measurement bounds
             continue
         else:
             index_x = np.searchsorted(data_x[0, :], xx)
             index_y = np.searchsorted(data_y[:, index_x], yy)
 
-            sim_new[ index_y,index_x] = np.exp(
+            sim_new[index_y, index_x] = np.exp(
                 np.complex(0, 1) * tele_geo.k * sim[15, :][cc][ii] / 1e3
             )
 

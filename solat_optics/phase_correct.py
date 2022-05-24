@@ -251,4 +251,3 @@ def center_beam(X, Y, beam, ZZ):
     ZZ = np.roll(np.roll(ZZ, yshift, axis=0), xshift, axis=1)
     beam = np.roll(np.roll(beam, yshift, axis=0), xshift, axis=1)
     return ZZ, beam
-
