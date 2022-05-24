@@ -37,6 +37,10 @@ Part 2 ray-traces from both the source and the receiver positions to the Lyot st
 
 Part 3 demonstrates how to run the simulation from the command line, and how to do so in parallel to speed up the simulation.  Doing so will save the simulation to a .txt file.  Lastly, the simulated near-field power and phase are read out from the text file and plotted.
 
+<p align="center">
+     <img src="https://github.com/McMahonCosmologyGroup/solat-optics/blob/main/figures/fields_out.png?raw=true" alt="centered image" width="50%"/>
+</p>
+
 ### Far-field
 
 ### Quantifying Optical Systematics
