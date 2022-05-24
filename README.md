@@ -29,7 +29,11 @@ Part 1 of the tutorial builds the surfaces of the optics tube which will eventua
      <img src="https://github.com/McMahonCosmologyGroup/solat-optics/blob/main/figures/raytrace1.png?raw=true" alt="centered image" width="50%"/>
 </p>
 
-Part 2 ray-traces from both the source and the receiver positions to the Lyot stop, located near the center of the optics tube.  The Lyot stop defines the size of the beam and therefor we use this as the plane where we integrate over the receiver and source fields.
+Part 2 ray-traces from both the source and the receiver positions to the Lyot stop, located near the center of the optics tube, yielding the source and receiver electric fields $E_{\text{source}}$ and $E_{\text{rec}}$.  The Lyot stop defines the size of the beam and therefor we integrate the receiver and source electric fields over the area of the Lyot stop (where the pink and blue rays meet in the middle of the optics tube).
+
+<p align="center">
+     <img src="https://github.com/McMahonCosmologyGroup/solat-optics/blob/main/figures/raytrace2.png?raw=true" alt="centered image" width="50%"/>
+</p>
 
 Part 3 demonstrates how to run the simulation from the command line, and how to do so in parallel to speed up the simulation.  Doing so will save the simulation to a .txt file.  Lastly, the simulated near-field power and phase are read out from the text file and plotted.
 
