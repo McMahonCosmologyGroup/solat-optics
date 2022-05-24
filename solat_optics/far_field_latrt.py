@@ -1,22 +1,9 @@
 """
-Far field simulation.
-
-Grace E. Chesmore
-May 2021
+Project far-field electric field onto near-field plane.
 """
-
-import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-
-path_to_package = "/home/chesmore/Desktop/Code/solat-optics"
-sys.path.append(path_to_package)
-import solat_optics.solat_apert_field as solat_apert_field
-
-sys.path.append("/home/chesmore/Desktop/Code/holosim_paper/package/holosim-ml")
-import pan_mod as pm
-
 
 def project_to_data(sim, data_x, data_y, tele_geo):
     cc = np.where(sim[15, :] != 0)

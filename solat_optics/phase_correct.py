@@ -67,7 +67,6 @@ def twodunwrapx1(array):
 
     return array
 
-
 def twodunwrap(array):
     """
     Call unwrap function after transposing phase array,
@@ -76,7 +75,6 @@ def twodunwrap(array):
     xunwraped = twodunwrapx1(np.transpose(array))
     unwrapped = twodunwrapx1(np.transpose(xunwraped))
     return unwrapped
-
 
 def do_unwrap(phase_input):
     """
@@ -89,38 +87,12 @@ def do_unwrap(phase_input):
     unwraped_phi = unwraped_phi * (180 / np.pi)  # convert back to degrees
     return unwraped_phi
 
-
 def defocus(amp, const, x_0, y_0, x_arr, y_arr):
     """
     Modelling a defocus phase term.
     """
     radius = np.sqrt((x_arr - x_0) ** 2 + (y_arr - y_0) ** 2)
     return amp * (radius ** 2) + const
-
-
-# def gradient_mod(grad_x,grad_y, x_0, y_0, x, y):
-#     '''
-#     Modelling a gradient phase term.
-#     '''
-#     return A * (x - x_0) + B * (y - y_0)
-
-
-# def rotate_beam(phi, beam_co, beam_cr):
-#     '''
-#     Optional function. This function takes cross and co-polar
-#     beam measurements and tilts by an angle to correct for cross-pol
-#     leakage.
-#     '''
-#     ok = np.where(X ** 2 + Y ** 2 <= 80 ** 2)
-#     beamco = np.cos(phi) * (beam_co[ok].real + beam_co[ok].imag) + np.sin(phi) * (
-#         beam_cr[ok].real + beam_cr[ok].imag
-#     )
-#     beamcr = -np.sin(phi) * (beam_co[ok].real + beam_co[ok].imag) + np.cos(phi) * (
-#         beam_cr[ok].real + beam_cr[ok].imag
-#     )
-
-#     return np.sqrt(beamcr ** 2).sum()
-
 
 def phase_model_terms(p_guess, x_arr, y_arr, fre):
     """
@@ -149,16 +121,6 @@ def phase_model_terms(p_guess, x_arr, y_arr, fre):
 
     return spherical + gradient + const
 
-
-# def phase_fit(p, X, Y, phase, fre):
-
-#     rad_fit = 4  # deg
-#     phase_mod = phase_model_terms(p, X, Y, fre)
-#     phase_mod = np.where(X ** 2 + Y ** 2 < (rad_fit * np.pi / 180) ** 2, phase_mod, 0)
-
-#     return np.sum(np.sqrt((phase_mod + phase) ** 2))
-
-
 def beam_center_new(p_guess, x_arr, y_arr, beam, rad_bndry):
     """
     Function which is fit to data to
@@ -172,7 +134,6 @@ def beam_center_new(p_guess, x_arr, y_arr, beam, rad_bndry):
     power_frac = np.sum(beam[np.where(radius >= rad_bndry)]) / np.sum(beam)
 
     return power_frac
-
 
 def beam_centering(theta_x, theta_y, phase_old, beam_old, rad):
     """
@@ -201,7 +162,6 @@ def beam_centering(theta_x, theta_y, phase_old, beam_old, rad):
 
     return phase_new, beam_new
 
-
 def center_beam(X, Y, beam, ZZ):
     p0 = [0, 0, 10, 10]
 
@@ -218,7 +178,6 @@ def center_beam(X, Y, beam, ZZ):
     beam = np.roll(np.roll(beam, yshift, axis=0), xshift, axis=1)
     return ZZ, beam
 
-
 def gauss(X, Y, p):
     x0 = p[0]
     y0 = p[1]
@@ -228,13 +187,11 @@ def gauss(X, Y, p):
     b = -((Y - y0) ** 2) / sig_b
     return np.exp(a + b)
 
-
 def gauss_min(p, X, Y, data):
 
     model = gauss(X, Y, p)
 
     return np.sum(np.sqrt((model - data) ** 2))
-
 
 def center_beam(X, Y, beam, ZZ):
     p0 = [0, 0, 10, 10]

@@ -1,11 +1,7 @@
 """
-Telescope geometry definitions.
-
-Grace E. Chesmore
-May 2021
+Large aperture telescope mirror definitions.
 """
 import numpy as np
-
 
 class initialize_telescope_geometry:
     """
@@ -51,7 +47,6 @@ class initialize_telescope_geometry:
     y_ap = -7.2
     z_ap = 4.0
 
-
 # Matrix Coefficients defining mirror surfaces
 # Primary Mirror
 a1 = np.zeros((7, 7))
@@ -91,7 +86,6 @@ def z1(x_arr, y_arr):
             )
     return amp
 
-
 def z2(x_arr, y_arr):
     """
     Secondary mirror surface.
@@ -105,7 +99,6 @@ def z2(x_arr, y_arr):
                 * ((y_arr / R_N) ** j_indx)
             )
     return amp
-
 
 def d_z1(x_arr, y_arr):
     """
@@ -129,7 +122,6 @@ def d_z1(x_arr, y_arr):
             )
     return amp_x, amp_y
 
-
 def d_z2(x_arr, y_arr):
     """
     Secondary mirror normal vector to surface.
@@ -152,10 +144,6 @@ def d_z2(x_arr, y_arr):
             )
     return amp_x, amp_y
 
-
-# Coordinate transfer functions. Transferring
-# coordinates between telescope reference frame
-# and mirror reference frame, and vice versa.
 def m1_into_tele(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from primary into telescope.
@@ -170,7 +158,6 @@ def m1_into_tele(x_arr, y_arr, z_arr):
     z_rot1 = (y_temp * np.sin(th1) + z_temp * np.cos(th1)) - 3600
     return x_rot1, y_rot1, z_rot1
 
-
 def m2_into_tele(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from secondary into telescope.
@@ -184,23 +171,6 @@ def m2_into_tele(x_arr, y_arr, z_arr):
     y_rot2 = (y_temp * np.cos(th2) - z_temp * np.sin(th2)) - 4800 - 7200
     z_rot2 = y_temp * np.sin(th2) + z_temp * np.cos(th2)
     return x_rot2, y_rot2, z_rot2
-
-
-# def tele_into_m1(x, y, z):
-#     th1 = initialize_telescope_geometry.th_1
-#     z += 3600
-#     y += 7200
-
-#     x_temp = x
-#     y_temp = y * np.cos(-th1) - z * np.sin(-th1)
-#     z_temp = y * np.sin(-th1) + z * np.cos(-th1)
-
-#     x2 = x_temp * np.cos(np.pi) + z_temp * np.sin(np.pi)
-#     y2 = y_temp
-#     z2 = -x_temp * np.sin(np.pi) + z_temp * np.cos(np.pi)
-
-#     return x2, y2, z2
-
 
 def tele_into_m1(x_arr, y_arr, z_arr, el_, az_):
     """
@@ -222,20 +192,6 @@ def tele_into_m1(x_arr, y_arr, z_arr, el_, az_):
 
     return x_2, y_2, z_2
 
-
-# def tele_into_m2(x, y, z):
-#     th2 = initialize_telescope_geometry.th2
-#     y += 4800 + 7200
-#     x_temp = x
-#     y_temp = y * np.cos(-th2) - z * np.sin(-th2)
-#     z_temp = y * np.sin(-th2) + z * np.cos(-th2)
-
-#     x2 = x_temp * np.cos(-np.pi) - y_temp * np.sin(-np.pi)
-#     y2 = x_temp * np.sin(-np.pi) + y_temp * np.cos(-np.pi)
-#     z2 = z_temp
-#     return x2, y2, z2
-
-
 def tele_into_m2(x_arr, y_arr, z_arr, el_, az_):
     """
     Coordinate transformation from telescope into secondary.
@@ -254,24 +210,12 @@ def tele_into_m2(x_arr, y_arr, z_arr, el_, az_):
 
     return x_2, y_2, z_2
 
-
-# def tele_geo_init(x_arr, y_arr, z_arr, el, az):
-#     tele_geo = initialize_telescope_geometry()
-#     tele_geo.rx_x = x_arr
-#     tele_geo.rx_y = y_arr
-#     tele_geo.rx_z = z_arr
-#     tele_geo.el0 += el
-#     tele_geo.az0 += az
-#     return tele_geo
-
-
 def z_ap(x_arr, y_arr):
     """
     Aperture plane surface.
     """
     z_arr = 0 * x_arr * y_arr
     return z_arr
-
 
 def z_focal(x_arr, y_arr):
     """
@@ -280,14 +224,6 @@ def z_focal(x_arr, y_arr):
     z_arr = 0 * x_arr * y_arr
     return z_arr
 
-
-# def apert_into_tele(x, y, z):
-#     z += 4e3  # go to telescope ref frame
-
-#     x, y, z = rotate_az_el(x, y, z, el, az)  # rotate
-#     return x, y, z
-
-
 def tele_into_apert(x_arr, y_arr, z_arr, el_, az_):
     """
     Coordinate transformation from telescope into aperture plane.
@@ -295,7 +231,6 @@ def tele_into_apert(x_arr, y_arr, z_arr, el_, az_):
     x_arr, y_arr, z_arr = rotate_az_el(x_arr, y_arr, z_arr, el_, az_)  # rotate
     z_arr -= 4e3  # go to apert ref frame
     return x_arr, y_arr, z_arr
-
 
 def foc_into_tele(x_arr, y_arr, z_arr, el_, az_):
     """
@@ -306,7 +241,6 @@ def foc_into_tele(x_arr, y_arr, z_arr, el_, az_):
     z_out = y_arr * np.sin(np.pi / 2) + z_arr * np.cos(np.pi / 2)
     x_out, y_out, z_out = rotate_az_el(x_out, y_out, z_out, el_, az_)
     return x_out, y_out, z_out
-
 
 def tele_into_foc(x_arr, y_arr, z_arr, el_, az_):
     """
@@ -319,7 +253,6 @@ def tele_into_foc(x_arr, y_arr, z_arr, el_, az_):
     z_out = y_arr * np.sin(-np.pi / 2) + z_arr * np.cos(-np.pi / 2)
 
     return x_out, y_out, z_out
-
 
 def rotate_az_el(x_arr, y_arr, z_arr, el_, az_):
     """
