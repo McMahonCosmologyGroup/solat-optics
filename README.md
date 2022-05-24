@@ -16,16 +16,22 @@ Author: Grace E. Chesmore
 3. `python3 setup.py install --user`
 
 ## Tutorials
-Three tutorials are available:
+Three tutorials are available as Jupyter notebooks:
 1. [Near-field](https://github.com/McMahonCosmologyGroup/solat-optics/tree/main/tutorials/latrt_holo_sim.ipynb)
 2. [Far-field](https://github.com/McMahonCosmologyGroup/solat-optics/tree/main/tutorials/latrt_farfield_sim.ipynb)
 3. [Quantifying Optical Systematics](https://github.com/McMahonCosmologyGroup/solat-optics/tree/main/tutorials/quant_systematics.ipynb)
 
 ### Near-field
+Part 1 of the tutorial builds the surfaces of the optics tube which will eventually be used in the near-field simulation of the optics tube.  First ray-trace from the focal plane out through the window.  This toy-model is useful for predicting the beam path and size based on the receiver's position of the focal plane, however this will provide no diffraction information.  
+
+Part 2 ray-traces from both the source and the receiver positions to the Lyot stop, located near the center of the optics tube.  The Lyot stop defines the size of the beam and therefor we use this as the plane where we integrate over the receiver and source fields.
+
+Part 3 demonstrates how to run the simulation from the command line, and how to do so in parallel to speed up the simulation.  Doing so will save the simulation to a .txt file.  Lastly, the simulated near-field power and phase are read out from the text file and plotted.
 
 ### Far-field
 
 ### Quantifying Optical Systematics
+
 
 ## Contributions
 If you have write access to this repository, please:
