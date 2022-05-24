@@ -45,10 +45,7 @@ Part 3 demonstrates how to run the simulation from the command line, and how to 
 
 Part 1 outlines the simulation where the optics tube simulated field is propagated through the two Large Aperture Telescope (LAT) mirrors. To do this, a ray-trace from a far-field point source through the LAT and to the LATR focal plane builds the electric field $E_{\text{source}}$.  The simulated optics tube field is used as our receiver electric field $E_{\text{rec}}$
 
-```math
-e(\theta,\phi)=\int_{\text{FP}}E_{\text{source}}(\theta,phi)E_{\text{rec}}dA
-\end{equation}
-```
+<img src="https://render.githubusercontent.com/render/math?math=e(\theta,\phi)=\int_{\text{FP}}E_{\text{source}}(\theta,phi)E_{\text{rec}}dA" style = "color: white">
 
 
 where $E_{\text{source}}$ is the electric field from the source and $E_{\text{rec}}$ is the electric field of the optics tube which we consider our receiver.  The two fields are then combined to give the total electric field $E_{\text{total}}$.  To get the amplitude and phase of the far-field electric field for this $\theta$ and $\phi$, we integrate $E_{\text{total}}$ over the area of the LATR focal plane.
