@@ -33,7 +33,7 @@ setup(name='solat_optics',
       author_email='chesmore@uchicago.edu',
       package_dir={'holog_run':'holog_run','ot_geo':'ot_geo','ray_trace':'ray_trace','ray_trace_int':'ray_trace_int'},
       packages=[package],
-      scripts=['scripts/beamsim_set.sh', 'scripts/latrt_holog_sim.ipynb'],
+      scripts=['scripts/beamsim_set.sh', 'scripts/latrt_holog_sim.ipynb', 'scripts/latrt_holog_sim.ipynb'],
      )
 
 
