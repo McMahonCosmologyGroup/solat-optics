@@ -36,7 +36,10 @@ setup(
     author="Grace E. Chesmore",
     author_email="chesmore@uchicago.edu",
     package_dir={
-        "holog_run": "holog_run",
+        "far_field_latrt": "far_field_latrt",
+        "latrt_geo": "latrt_geo",
+        "phase_correct": "phase_correct",
+        "solat_apert_field": "solat_apert_field",
         "ot_geo": "ot_geo",
         "ray_trace": "ray_trace",
         "ray_trace_int": "ray_trace_int",
@@ -44,8 +47,8 @@ setup(
     packages=[package],
     scripts=[
         "scripts/beamsim_set.sh",
-        "scripts/latrt_holog_sim.ipynb",
-        "scripts/latrt_holog_sim.ipynb",
+        "scripts/ff_sim.py",
+        "scripts/holo_sim.py",
     ],
 )
 
