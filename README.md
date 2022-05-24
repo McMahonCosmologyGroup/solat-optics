@@ -3,6 +3,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
 Near- and Far-field optical simulation of the Simons Observatory Large Aperture Telescope.  This is the repository associated with the publication: <i>The Simons Observatory: Characterizing the Large Aperture Telescope Receiver with Radio Holography</i>.  <br />
+
 Author: Grace E. Chesmore
 
 <p align="center">
@@ -22,7 +23,11 @@ Three tutorials are available as Jupyter notebooks:
 3. [Quantifying Optical Systematics](https://github.com/McMahonCosmologyGroup/solat-optics/tree/main/tutorials/quant_systematics.ipynb)
 
 ### Near-field
-Part 1 of the tutorial builds the surfaces of the optics tube which will eventually be used in the near-field simulation of the optics tube.  First ray-trace from the focal plane out through the window.  This toy-model is useful for predicting the beam path and size based on the receiver's position of the focal plane, however this will provide no diffraction information.  
+Part 1 of the tutorial builds the surfaces of the optics tube which will eventually be used in the near-field simulation of the optics tube.  First ray-trace from the focal plane out through the window.  This toy-model is useful for predicting the beam path and size based on the receiver's position of the focal plane, however this will provide no diffraction information.  The user can drag / zoom / and hover over the ray-trace to see the labelled optics tube surfaces.
+
+<p align="center">
+     <img src="https://github.com/McMahonCosmologyGroup/solat-optics/blob/main/figures/raytrace1.png?raw=true" alt="centered image" width="50%"/>
+</p>
 
 Part 2 ray-traces from both the source and the receiver positions to the Lyot stop, located near the center of the optics tube.  The Lyot stop defines the size of the beam and therefor we use this as the plane where we integrate over the receiver and source fields.
 

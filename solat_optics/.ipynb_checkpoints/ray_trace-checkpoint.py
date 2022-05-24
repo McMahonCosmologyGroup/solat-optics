@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from ot_geo import *
+
 from scipy import optimize
 
 import solat_optics
-from solat_optics import ot_geo
-
+import solat_optics.ot_geo as ot_geo
+from solat_optics.ot_geo import *
 
 def snell_vec(n1, n2, N_surf, s1):
     # s1 is the incoming vector, pointing from the light source to the surface

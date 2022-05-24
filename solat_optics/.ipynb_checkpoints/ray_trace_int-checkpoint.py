@@ -6,9 +6,20 @@ December 2021
 import multiprocessing as mp
 
 import numpy as np
-import ot_geo
-from ot_geo import *
+
+import solat_optics
+import solat_optics.ot_geo as ot_geo
+from solat_optics.ot_geo import *
+import solat_optics.ray_trace as ray_trace
+
 from scipy import optimize
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import optimize
+from scipy.interpolate import interp2d
+from scipy.spatial import distance
 
 
 def snell_vec(n_1, n_2, n_surf, s_1):
@@ -1374,15 +1385,6 @@ class source_to_lyot_model:
         self.out = np.array(result).transpose()
 
         return self.out
-
-
-import matplotlib.pyplot as plt
-import numpy as np
-import ray_trace
-from scipy import optimize
-from scipy.interpolate import interp2d
-from scipy.spatial import distance
-
 
 def regrid(beam1, beam2):
 
