@@ -2,7 +2,7 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
-Near- and Far-field optical simulation of the Simons Observatory Large Aperture Telescope.  This is the repository associated with <i>The Simons Observatory: Characterizing the Large Aperture Telescope Receiver with Radio Holography</i> <br />
+Near- and Far-field optical simulation of the Simons Observatory Large Aperture Telescope.  This is the repository associated with the publication: <i>The Simons Observatory: Characterizing the Large Aperture Telescope Receiver with Radio Holography</i>.  <br />
 Author: Grace E. Chesmore
 
 <p align="center">
@@ -20,6 +20,12 @@ Three tutorials are available:
 1. [Near-field](https://github.com/McMahonCosmologyGroup/solat-optics/tree/main/tutorials/latrt_holo_sim.ipynb)
 2. [Far-field](https://github.com/McMahonCosmologyGroup/solat-optics/tree/main/tutorials/latrt_farfield_sim.ipynb)
 3. [Quantifying Optical Systematics](https://github.com/McMahonCosmologyGroup/solat-optics/tree/main/tutorials/quant_systematics.ipynb)
+
+### Near-field
+
+### Far-field
+
+### Quantifying Optical Systematics
 
 ## Contributions
 If you have write access to this repository, please:
