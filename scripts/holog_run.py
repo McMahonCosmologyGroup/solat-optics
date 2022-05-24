@@ -14,11 +14,11 @@ import sys
 import time
 
 import numpy as np
-import solat_optics
-from solat_optics import ot_geo
-from solat_optics import ray_trace
 from mpi4py import MPI
 from tqdm import tqdm
+
+import solat_optics
+from solat_optics import ot_geo, ray_trace
 
 
 # When calling ray-tracing functions, we do not want to output plots here.
@@ -71,6 +71,7 @@ FILE_NAME = (
     + str(int(freq))
     + "GHz.txt"
 )
+
 
 def enum(*seq):
     """

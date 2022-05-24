@@ -3,11 +3,12 @@ Functions to produce electric fields on the aperture planes from various sources
 Author: Grace E. Chesmore
 December 2021
 """
+import multiprocessing as mp
+
 import numpy as np
 import ot_geo
 from ot_geo import *
 from scipy import optimize
-import multiprocessing as mp
 
 
 def snell_vec(n_1, n_2, n_surf, s_1):
@@ -1156,12 +1157,12 @@ class source_to_lyot_model:
             n_hat_t[2] = n_hat[1] * np.sin(th1_l2) + n_hat[2] * np.cos(th1_l2)
 
             tan_m1a_m2b_t[0] = tan_m1a_m2b[0]
-            tan_m1a_m2b_t[1] = tan_m1a_m2b[1] * np.cos(th1_l2) - tan_m1a_m2b[2] * np.sin(
-                th1_l2
-            )
-            tan_m1a_m2b_t[2] = tan_m1a_m2b[1] * np.sin(th1_l2) + tan_m1a_m2b[2] * np.cos(
-                th1_l2
-            )
+            tan_m1a_m2b_t[1] = tan_m1a_m2b[1] * np.cos(th1_l2) - tan_m1a_m2b[
+                2
+            ] * np.sin(th1_l2)
+            tan_m1a_m2b_t[2] = tan_m1a_m2b[1] * np.sin(th1_l2) + tan_m1a_m2b[
+                2
+            ] * np.cos(th1_l2)
 
             tan_og_t[0] = tan_og[0]
             tan_og_t[1] = tan_og[1] * np.cos(th1_l2) - tan_og[2] * np.sin(th1_l2)
@@ -1196,7 +1197,7 @@ class source_to_lyot_model:
                     0,
                     0,
                 ]
-            
+
             else:
 
                 alpha = tan_og_t[0]
@@ -1256,12 +1257,12 @@ class source_to_lyot_model:
                 n_hat_t[2] = n_hat[1] * np.sin(th2_l2) + n_hat[2] * np.cos(th2_l2)
 
                 tan_m2b_m2a_t[0] = tan_m2b_m2a[0]
-                tan_m2b_m2a_t[1] = tan_m2b_m2a[1] * np.cos(th2_l2) - tan_m2b_m2a[2] * np.sin(
-                    th2_l2
-                )
-                tan_m2b_m2a_t[2] = tan_m2b_m2a[1] * np.sin(th2_l2) + tan_m2b_m2a[2] * np.cos(
-                    th2_l2
-                )
+                tan_m2b_m2a_t[1] = tan_m2b_m2a[1] * np.cos(th2_l2) - tan_m2b_m2a[
+                    2
+                ] * np.sin(th2_l2)
+                tan_m2b_m2a_t[2] = tan_m2b_m2a[1] * np.sin(th2_l2) + tan_m2b_m2a[
+                    2
+                ] * np.cos(th2_l2)
 
                 tan_og_t[0] = tan_og[0]
                 tan_og_t[1] = tan_og[1] * np.cos(th2_l2) - tan_og[2] * np.sin(th2_l2)
@@ -1302,9 +1303,9 @@ class source_to_lyot_model:
                 norm = d_zlyot()
                 norm_temp = np.array([-norm[0], -norm[1], 1])
                 n_hat = norm_temp / np.sqrt(sum(norm_temp ** 2))
-                vec_m2a_lyot = np.array([x_m2a_temp, y_m2a_temp, z_m2a_temp]) - np.array(
-                    [x_lyot_temp, y_lyot_temp, z_lyot_temp]
-                )
+                vec_m2a_lyot = np.array(
+                    [x_m2a_temp, y_m2a_temp, z_m2a_temp]
+                ) - np.array([x_lyot_temp, y_lyot_temp, z_lyot_temp])
                 dist_m2a_lyot = np.sqrt(np.sum(vec_m2a_lyot ** 2))
                 tan_m2a_lyot = vec_m2a_lyot / dist_m2a_lyot
 
@@ -1320,18 +1321,20 @@ class source_to_lyot_model:
                 n_hat_t[2] = n_hat[1] * np.sin(th1_l3) + n_hat[2] * np.cos(th1_l3)
 
                 tan_m2a_lyot_t[0] = tan_m2a_lyot[0]
-                tan_m2a_lyot_t[1] = tan_m2a_lyot[1] * np.cos(th1_l3) - tan_m2a_lyot[2] * np.sin(
-                    th1_l3
-                )
-                tan_m2a_lyot_t[2] = tan_m2a_lyot[1] * np.sin(th1_l3) + tan_m2a_lyot[2] * np.cos(
-                    th1_l3
-                )
+                tan_m2a_lyot_t[1] = tan_m2a_lyot[1] * np.cos(th1_l3) - tan_m2a_lyot[
+                    2
+                ] * np.sin(th1_l3)
+                tan_m2a_lyot_t[2] = tan_m2a_lyot[1] * np.sin(th1_l3) + tan_m2a_lyot[
+                    2
+                ] * np.cos(th1_l3)
 
                 tan_og_t[0] = tan_og[0]
                 tan_og_t[1] = tan_og[1] * np.cos(th1_l3) - tan_og[2] * np.sin(th1_l3)
                 tan_og_t[2] = tan_og[1] * np.sin(th1_l3) + tan_og[2] * np.cos(th1_l3)
 
-                total_path_length = (t_m1b) + (t_m1a * n_si) + (t_m2b) + (t_m2a * n_si) + t_lyot
+                total_path_length = (
+                    (t_m1b) + (t_m1a * n_si) + (t_m2b) + (t_m2a * n_si) + t_lyot
+                )
 
                 amp = 1
                 return [

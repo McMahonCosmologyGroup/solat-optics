@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import solat_optics
-from solat_optics import ot_geo
 from ot_geo import *
 from scipy import optimize
+
+import solat_optics
+from solat_optics import ot_geo
 
 
 def snell_vec(n1, n2, N_surf, s1):
@@ -1177,7 +1178,7 @@ def source_to_lyot_model(P_source, tele_geo, plots, col):
 
         out[3, ii] = total_path_length
 
-        out[4, ii] = 1  
+        out[4, ii] = 1
         out[5, ii] = N_hat_t[0]
         out[6, ii] = N_hat_t[1]
         out[7, ii] = N_hat_t[2]
