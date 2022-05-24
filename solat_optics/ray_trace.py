@@ -6,38 +6,40 @@ import solat_optics
 import solat_optics.ot_geo as ot_geo
 from solat_optics.ot_geo import *
 
+
 def snell_vec(n1, n2, N_surf, s1):
-    '''
-    Vectorized snell's law. 
+    """
+    Vectorized snell's law.
     n1 = refractive index of medium 1
     n2 = refractive index of medium 2
     N_surf = normal vector to surface
     s1 = vector of incident light
-    '''
+    """
     s2 = (n1 / n2) * np.cross(N_surf, (np.cross(-N_surf, s1))) - N_surf * np.sqrt(
         1 - (n1 / n2) ** 2 * np.dot((np.cross(N_surf, s1)), (np.cross(N_surf, s1)))
     )
 
     return s2
 
+
 def aperature_fields(P_rx, tele_geo, plot, col):
-    '''
+    """
     Aperature fields for a given P_rx and a given telescope geometry.
-    '''
+    """
     alph = 0.05  # transparency of plotted lines
 
-    y_ap = tele_geo.y_ap # y-coordinate of aperture
-    horn_fwhp = tele_geo.th_fwhp # full-width half-max of antenna beam
-    n_vac = tele_geo.n_vac # refractive index of vacuum
-    n_si = tele_geo.n_si # refractive index of silicon
+    y_ap = tele_geo.y_ap  # y-coordinate of aperture
+    horn_fwhp = tele_geo.th_fwhp  # full-width half-max of antenna beam
+    n_vac = tele_geo.n_vac  # refractive index of vacuum
+    n_si = tele_geo.n_si  # refractive index of silicon
 
-    N_linear = tele_geo.N_scan # number of linear elements
-    focal = tele_geo.F_2 # focal length from focal plane to secondary mirror [mm]
+    N_linear = tele_geo.N_scan  # number of linear elements
+    focal = tele_geo.F_2  # focal length from focal plane to secondary mirror [mm]
     # Step 1:  grid the plane of rays shooting out of receiver feed
-    theta = np.linspace(-(np.pi / 2) - 0.25, -(np.pi / 2) + 0.25, N_linear) # [rad]
-    phi = np.linspace((np.pi / 2) - 0.25, (np.pi / 2) + 0.25, N_linear) # [rad]
+    theta = np.linspace(-(np.pi / 2) - 0.25, -(np.pi / 2) + 0.25, N_linear)  # [rad]
+    phi = np.linspace((np.pi / 2) - 0.25, (np.pi / 2) + 0.25, N_linear)  # [rad]
 
-    theta, phi = np.meshgrid(theta, phi) 
+    theta, phi = np.meshgrid(theta, phi)
     theta = np.ravel(theta)
     phi = np.ravel(phi)
 
@@ -46,11 +48,15 @@ def aperature_fields(P_rx, tele_geo, plot, col):
     out = np.zeros((17, n_pts))
 
     for ii in range(n_pts):
-  
-        th = theta[ii] # [rad]
-        ph = phi[ii] # [rad]
 
-        r_hat = [np.sin(th) * np.cos(ph), np.sin(th) * np.sin(ph), np.cos(th)] # r-hat vector
+        th = theta[ii]  # [rad]
+        ph = phi[ii]  # [rad]
+
+        r_hat = [
+            np.sin(th) * np.cos(ph),
+            np.sin(th) * np.sin(ph),
+            np.cos(th),
+        ]  # r-hat vector
 
         alpha = r_hat[0]
         beta = r_hat[1]
@@ -61,24 +67,24 @@ def aperature_fields(P_rx, tele_geo, plot, col):
         y_0 = P_rx[1]
         z_0 = P_rx[2]
 
-        def root_z3a(t): # root finder for surface z3a
+        def root_z3a(t):  # root finder for surface z3a
 
-            # final location of the ray 
-            x = x_0 + alpha * t 
+            # final location of the ray
+            x = x_0 + alpha * t
             y = y_0 + beta * t
             z = z_0 + gamma * t
 
-            xm3a, ym3a, zm3a = tele_into_m3a( 
+            xm3a, ym3a, zm3a = tele_into_m3a(
                 x, y, z
             )  # Convert ray's endpoint into M2 coordinates
 
             z_m3a = z3a(xm3a, ym3a)  # Z of mirror in M2 coordinates
-            if np.isnan(z_m3a) == True: # if ray is outside M2
-                z_m3a = 0 # set z_m3a to 0
-            root = zm3a - z_m3a # how close is the end-point of ray to the surface
-            return root 
+            if np.isnan(z_m3a) == True:  # if ray is outside M2
+                z_m3a = 0  # set z_m3a to 0
+            root = zm3a - z_m3a  # how close is the end-point of ray to the surface
+            return root
 
-        t_m3a = optimize.brentq(root_z3a, 2, 1600) # find root of root_z3a
+        t_m3a = optimize.brentq(root_z3a, 2, 1600)  # find root of root_z3a
 
         # Location of where ray hits M2
         x_m3a = x_0 + alpha * t_m3a
@@ -86,26 +92,40 @@ def aperature_fields(P_rx, tele_geo, plot, col):
         z_m3a = z_0 + gamma * t_m3a
         P_m3a = np.array([x_m3a, y_m3a, z_m3a])
 
-        if x_m3a ** 2 + x_m3a ** 2 >= (392 / 2) ** 2: # if ray is outside max radius of surface 3
-            continue # skip to next ray
+        if (
+            x_m3a ** 2 + x_m3a ** 2 >= (392 / 2) ** 2
+        ):  # if ray is outside max radius of surface 3
+            continue  # skip to next ray
 
         # convert temporarily to surface 3 coordinates
         x_m3a_temp, y_m3a_temp, z_m3a_temp = tele_into_m3a(
             x_m3a, y_m3a, z_m3a
         )  # end point of ray in surface 3 coordinates
-        x_rx_temp, y_rx_temp, z_rx_temp = tele_into_m3a(x_0, y_0, z_0)  # start point of ray in surface 3 coordinates
-        norm = d_z3a(x_m3a_temp, y_m3a_temp) # normal vector to surface 3
-        norm_temp = np.array([-norm[0], -norm[1], 1]) # normal vector to surface 3 in surface 3 coordinates
-        N_hat = norm_temp / np.sqrt(sum(norm_temp ** 2)) # normalized normal vector to surface 3
+        x_rx_temp, y_rx_temp, z_rx_temp = tele_into_m3a(
+            x_0, y_0, z_0
+        )  # start point of ray in surface 3 coordinates
+        norm = d_z3a(x_m3a_temp, y_m3a_temp)  # normal vector to surface 3
+        norm_temp = np.array(
+            [-norm[0], -norm[1], 1]
+        )  # normal vector to surface 3 in surface 3 coordinates
+        N_hat = norm_temp / np.sqrt(
+            sum(norm_temp ** 2)
+        )  # normalized normal vector to surface 3
 
         vec_rx_m3a = np.array([x_m3a_temp, y_m3a_temp, z_m3a_temp]) - np.array(
             [x_rx_temp, y_rx_temp, z_rx_temp]
-        ) # vector from start point to end point of ray in surface 3 coordinates
-        dist_rx_m3a = np.sqrt(np.sum(vec_rx_m3a ** 2)) # distance from start point to end point of ray
-        tan_rx_m3a = vec_rx_m3a / dist_rx_m3a # tangent vector to surface 3 at end point of ray
+        )  # vector from start point to end point of ray in surface 3 coordinates
+        dist_rx_m3a = np.sqrt(
+            np.sum(vec_rx_m3a ** 2)
+        )  # distance from start point to end point of ray
+        tan_rx_m3a = (
+            vec_rx_m3a / dist_rx_m3a
+        )  # tangent vector to surface 3 at end point of ray
 
         # Use Snell's Law to find angle of outgoing ray:
-        tan_og_si = snell_vec(n_vac, n_si, N_hat, tan_rx_m3a) # outgoing tangent vector to surface 3
+        tan_og_si = snell_vec(
+            n_vac, n_si, N_hat, tan_rx_m3a
+        )  # outgoing tangent vector to surface 3
 
         # Transform back to telescope cordinates
         N_hat_t = np.zeros(3)
@@ -114,7 +134,7 @@ def aperature_fields(P_rx, tele_geo, plot, col):
         N_hat_t[2] = N_hat[1] * np.sin(th1_l3) + N_hat[2] * np.cos(th1_l3)
 
         # Calculate the incoming ray vector
-        tan_rx_m3a_t = np.zeros(3) 
+        tan_rx_m3a_t = np.zeros(3)
         tan_rx_m3a_t[0] = tan_rx_m3a[0]
         tan_rx_m3a_t[1] = tan_rx_m3a[1] * np.cos(th1_l3) - tan_rx_m3a[2] * np.sin(
             th1_l3
@@ -457,7 +477,9 @@ def aperature_fields(P_rx, tele_geo, plot, col):
         tan_og_t[2] = tan_og_vac[1] * np.sin(th1_l1) + tan_og_vac[2] * np.cos(th1_l1)
 
         ################################################
-        dist_m1b_ap = abs((y_ap - P_m1b[1]) / tan_og_t[1]) # distance from final ray endpoint to aperture
+        dist_m1b_ap = abs(
+            (y_ap - P_m1b[1]) / tan_og_t[1]
+        )  # distance from final ray endpoint to aperture
         total_path_length = (
             dist_rx_m3a
             + dist_m3a_m3b * (n_si)
@@ -466,13 +488,12 @@ def aperature_fields(P_rx, tele_geo, plot, col):
             + dist_m2b_m1a
             + dist_m1a_m1b * (n_si)
             + dist_m1b_ap
-        ) # total path length
+        )  # total path length
 
-
-        pos_ap = P_m1b - dist_m1b_ap * tan_og_t # position of aperture
+        pos_ap = P_m1b - dist_m1b_ap * tan_og_t  # position of aperture
 
         # Angle of final outgoing ray
-        de_ve = np.arctan(tan_rx_m3a_t[0] / (-tan_rx_m3a_t[1])) 
+        de_ve = np.arctan(tan_rx_m3a_t[0] / (-tan_rx_m3a_t[1]))
         de_ho = np.arctan(
             tan_rx_m3a_t[2] / np.sqrt(tan_rx_m3a_t[0] ** 2 + tan_rx_m3a_t[1] ** 2)
         )
@@ -518,10 +539,11 @@ def aperature_fields(P_rx, tele_geo, plot, col):
         out[10, ii] = tan_og_t[2]
     return out
 
+
 def rx_to_lyot_model(P_rx, tele_geo, plot, col):
-    '''
+    """
     Ray trace from receiver feed to Lyot stop.
-    '''
+    """
     horn_fwhp = tele_geo.th_fwhp
     n_vac = tele_geo.n_vac
     n_si = tele_geo.n_si
@@ -788,10 +810,11 @@ def rx_to_lyot_model(P_rx, tele_geo, plot, col):
 
     return out
 
+
 def source_to_lyot_model(P_source, tele_geo, plots, col):
-    '''
+    """
     Ray trace from source to Lyot stop.
-    '''
+    """
     alph = 0.01
 
     horn_fwhp = tele_geo.th_fwhp

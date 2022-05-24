@@ -4,10 +4,8 @@ import sys
 path_to_package = "/home/chesmore/Desktop/Code/solat-optics"
 sys.path.append(path_to_package)
 
-# Holosim packages
-import ap_fitting as afit
-import far_field as ff
 import numpy as np
+# Holosim packages
 import pan_mod as pm
 from pan_mod import *
 from scipy import optimize
@@ -17,12 +15,16 @@ from solat_optics.latrt_geo import *
 
 th2 = (-np.pi / 2) - initialize_telescope_geometry.th_2
 
-y_cent_m1 = -7201.003729431267
+y_cent_m1 = -7201.003729431267  # center of LAT coordinates in [mm]
 
 adj_pos_m1, adj_pos_m2 = pm.get_single_vert_adj_positions()
 
 
 class RayMirrorPts:
+    """
+    Optional method for multiprocessing the ray tracing.
+    """
+
     def __init__(self, tele_geo, theta, phi, el, az):
         theta, phi = np.meshgrid(theta, phi)
         theta = np.ravel(theta)

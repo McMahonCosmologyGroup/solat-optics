@@ -16,6 +16,7 @@ import solat_optics.ot_geo as ot_geo
 import solat_optics.ray_trace as ray_trace
 from solat_optics.ot_geo import *
 
+
 def snell_vec(n_1, n_2, n_surf, s_1):
     """
     Vectorized snell's law, returing outgoing angle of ray through a medium.
@@ -27,6 +28,7 @@ def snell_vec(n_1, n_2, n_surf, s_1):
     )
 
     return s_2
+
 
 class aperature_fields:
     def __init__(self, P_rx, tele_geo, plotOpts):
@@ -573,6 +575,7 @@ class aperature_fields:
 
         return self.out
 
+
 class rx_to_lyot_model:
     """
     Produces electric fields on aperture plane ray-traced from the receiver feed.
@@ -880,6 +883,7 @@ class rx_to_lyot_model:
         self.out = np.array(result).transpose()
 
         return self.out
+
 
 class source_to_lyot_model:
     """
@@ -1376,6 +1380,7 @@ class source_to_lyot_model:
         self.out = np.array(result).transpose()
 
         return self.out
+
 
 def regrid(beam1, beam2):
 

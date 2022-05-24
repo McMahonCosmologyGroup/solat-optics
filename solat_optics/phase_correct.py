@@ -9,7 +9,7 @@ def twodunwrapx1(array):
     """
     Unwrap 2D phase array.
     """
-    phase_offset = np.arange(-1000, 1000) * 2 * np.pi
+    phase_offset = np.arange(-1000, 1000) * 2 * np.pi  # phase offset in radians
 
     end = len(array)
 
@@ -17,11 +17,13 @@ def twodunwrapx1(array):
     while i < end:
         j = int(end / 2)
         while j < (np.shape(array))[1] - 1:
-            current_val = [array[i, j]]
-            next_val = array[i, j + 1] + phase_offset
-            diff = np.abs(next_val - current_val)
-            best = np.where(diff == np.min(diff))
-            array[i, j + 1] = next_val[best][0]
+            current_val = [array[i, j]]  # current value
+            next_val = array[i, j + 1] + phase_offset  # next value
+            diff = np.abs(
+                next_val - current_val
+            )  # difference between current and next value
+            best = np.where(diff == np.min(diff))  # index of best value
+            array[i, j + 1] = next_val[best][0]  # replace next value with best value
 
             j += 1
         i += 1
@@ -67,14 +69,16 @@ def twodunwrapx1(array):
 
     return array
 
+
 def twodunwrap(array):
     """
     Call unwrap function after transposing phase array,
     then transposing again and unwrapping.
     """
-    xunwraped = twodunwrapx1(np.transpose(array))
-    unwrapped = twodunwrapx1(np.transpose(xunwraped))
+    xunwraped = twodunwrapx1(np.transpose(array))  # transpose and unwrap
+    unwrapped = twodunwrapx1(np.transpose(xunwraped))  # transpose and unwrap
     return unwrapped
+
 
 def do_unwrap(phase_input):
     """
@@ -83,9 +87,10 @@ def do_unwrap(phase_input):
     """
     phi = phase_input * (np.pi / 180)  # convert to radians
     unwraped_phi = twodunwrap(phi)
-    unwraped_phi = unwraped_phi - unwraped_phi[0, 0]
+    unwraped_phi = unwraped_phi - unwraped_phi[0, 0]  # remove offset
     unwraped_phi = unwraped_phi * (180 / np.pi)  # convert back to degrees
     return unwraped_phi
+
 
 def defocus(amp, const, x_0, y_0, x_arr, y_arr):
     """
@@ -93,6 +98,7 @@ def defocus(amp, const, x_0, y_0, x_arr, y_arr):
     """
     radius = np.sqrt((x_arr - x_0) ** 2 + (y_arr - y_0) ** 2)
     return amp * (radius ** 2) + const
+
 
 def phase_model_terms(p_guess, x_arr, y_arr, fre):
     """
@@ -121,6 +127,7 @@ def phase_model_terms(p_guess, x_arr, y_arr, fre):
 
     return spherical + gradient + const
 
+
 def beam_center_new(p_guess, x_arr, y_arr, beam, rad_bndry):
     """
     Function which is fit to data to
@@ -134,6 +141,7 @@ def beam_center_new(p_guess, x_arr, y_arr, beam, rad_bndry):
     power_frac = np.sum(beam[np.where(radius >= rad_bndry)]) / np.sum(beam)
 
     return power_frac
+
 
 def beam_centering(theta_x, theta_y, phase_old, beam_old, rad):
     """
@@ -162,6 +170,7 @@ def beam_centering(theta_x, theta_y, phase_old, beam_old, rad):
 
     return phase_new, beam_new
 
+
 def center_beam(X, Y, beam, ZZ):
     p0 = [0, 0, 10, 10]
 
@@ -178,6 +187,7 @@ def center_beam(X, Y, beam, ZZ):
     beam = np.roll(np.roll(beam, yshift, axis=0), xshift, axis=1)
     return ZZ, beam
 
+
 def gauss(X, Y, p):
     x0 = p[0]
     y0 = p[1]
@@ -187,11 +197,13 @@ def gauss(X, Y, p):
     b = -((Y - y0) ** 2) / sig_b
     return np.exp(a + b)
 
+
 def gauss_min(p, X, Y, data):
 
     model = gauss(X, Y, p)
 
     return np.sum(np.sqrt((model - data) ** 2))
+
 
 def center_beam(X, Y, beam, ZZ):
     p0 = [0, 0, 10, 10]

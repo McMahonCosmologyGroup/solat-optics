@@ -8,6 +8,7 @@ import numpy as np
 import scipy.ndimage as ndimage
 from PIL import Image, ImageOps
 
+
 class LatGeo:
     """
     LAT geometry settings.
@@ -56,6 +57,7 @@ class LatGeo:
         self.lambda_ = wavelength
         self.k = 2 * np.pi / wavelength
 
+
 th1_l1 = np.pi / 2
 th2_l1 = -np.pi / 2
 th1_l2 = -np.pi / 2
@@ -74,6 +76,7 @@ def z1b():
     Surface shape of lens 1 side B.
     """
     return 0
+
 
 def z1a(x_arr, y_arr):
     """
@@ -96,6 +99,7 @@ def z1a(x_arr, y_arr):
         amp += a_1 * r_arr ** 2 + a_2 * r_arr ** 4 + a_3 * r_arr ** 6 + a_4 * r_arr ** 8
     return amp
 
+
 def d_z1b():
     """
     Normal vector of surface of lens 1 side B.
@@ -103,6 +107,7 @@ def d_z1b():
     amp_x = 0
     amp_y = 0
     return amp_x, amp_y
+
 
 def d_z1a(x_arr, y_arr):
     """
@@ -133,6 +138,7 @@ def d_z1a(x_arr, y_arr):
 
     return amp_x, amp_y
 
+
 def m1b_into_tele(x_arr, y_arr, z_arr):
     """
     Coordinate transform from lens 1 side B into telescope reference frame.
@@ -142,6 +148,7 @@ def m1b_into_tele(x_arr, y_arr, z_arr):
     z_rot1 = y_arr * np.sin(th1_l1) + z_arr * np.cos(th1_l1)
     return x_rot1, y_rot1, z_rot1
 
+
 def m1a_into_tele(x_arr, y_arr, z_arr):
     """
     Coordinate transform from lens 1 side A into telescope reference frame.
@@ -150,6 +157,7 @@ def m1a_into_tele(x_arr, y_arr, z_arr):
     y_rot2 = (y_arr * np.cos(th2_l1) - z_arr * np.sin(th2_l1)) - (LENS1_Y - 19.32)
     z_rot2 = y_arr * np.sin(th2_l1) + z_arr * np.cos(th2_l1)
     return x_rot2, y_rot2, z_rot2
+
 
 def tele_into_m1b(x_arr, y_arr, z_arr):
     """
@@ -162,6 +170,7 @@ def tele_into_m1b(x_arr, y_arr, z_arr):
 
     return x_temp, y_temp, z_temp
 
+
 def tele_into_m1a(x_arr, y_arr, z_arr):
     """
     Coordinate transform from telescope reference frame into lens 1 side  reference frame.
@@ -173,11 +182,13 @@ def tele_into_m1a(x_arr, y_arr, z_arr):
 
     return x_temp, y_temp, z_temp
 
+
 def z2b():
     """
     Surface shape of lens 2 side B.
     """
     return 0
+
 
 def z2a(x_arr, y_arr):
     """
@@ -200,6 +211,7 @@ def z2a(x_arr, y_arr):
         amp += a_1 * r_arr ** 2 + a_2 * r_arr ** 4 + a_3 * r_arr ** 6 + a_4 * r_arr ** 8
     return amp
 
+
 def d_z2b():
     """
     Normal vector to surface lens 2 side B.
@@ -207,6 +219,7 @@ def d_z2b():
     amp_x = 0
     amp_y = 0
     return amp_x, amp_y
+
 
 def d_z2a(x_arr, y_arr):
     """
@@ -236,6 +249,7 @@ def d_z2a(x_arr, y_arr):
     amp_y = y_arr * (coeff_1 + coeff_2 + coeff_3)
     return amp_x, amp_y
 
+
 def m2b_into_tele(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from lens 2 side B into telescope reference frame.
@@ -245,6 +259,7 @@ def m2b_into_tele(x_arr, y_arr, z_arr):
     z_rot1 = y_arr * np.sin(th1_l2) + z_arr * np.cos(th1_l2)
     return x_rot1, y_rot1, z_rot1
 
+
 def m2a_into_tele(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from lens 2 side A into telescope reference frame.
@@ -253,6 +268,7 @@ def m2a_into_tele(x_arr, y_arr, z_arr):
     y_rot2 = (y_arr * np.cos(th2_l2) - z_arr * np.sin(th2_l2)) - (LENS2_Y - 26.47)
     z_rot2 = y_arr * np.sin(th2_l2) + z_arr * np.cos(th2_l2)
     return x_rot2, y_rot2, z_rot2
+
 
 def tele_into_m2b(x_arr, y_arr, z_arr):
     """
@@ -265,6 +281,7 @@ def tele_into_m2b(x_arr, y_arr, z_arr):
 
     return x_temp, y_temp, z_temp
 
+
 def tele_into_m2a(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from telescope into lens 2 side A reference frame.
@@ -275,6 +292,7 @@ def tele_into_m2a(x_arr, y_arr, z_arr):
     z_temp = y_arr * np.sin(-th2_l1) + z_arr * np.cos(-th2_l1)
 
     return x_temp, y_temp, z_temp
+
 
 def z3a(x_arr, y_arr):
     """
@@ -297,6 +315,7 @@ def z3a(x_arr, y_arr):
         amp += a_1 * r_arr ** 2 + a_2 * r_arr ** 4 + a_3 * r_arr ** 6 + a_4 * r_arr ** 8
     return amp
 
+
 def z3b(x_arr, y_arr):
     """
     Surface shape of lens 3 side B.
@@ -318,11 +337,13 @@ def z3b(x_arr, y_arr):
         amp += a_1 * r_arr ** 2 + a_2 * r_arr ** 4 + a_3 * r_arr ** 6 + a_4 * r_arr ** 8
     return amp
 
+
 def filt():
     """
     Surface shape of filter.
     """
     return 0
+
 
 def d_z3a(x_arr, y_arr):
     """
@@ -353,6 +374,7 @@ def d_z3a(x_arr, y_arr):
 
     return amp_x, amp_y
 
+
 def d_z3b(x_arr, y_arr):
     """
     Normal vector on surface of lens 3 side B.
@@ -382,6 +404,7 @@ def d_z3b(x_arr, y_arr):
 
     return amp_x, amp_y
 
+
 def m3a_into_tele(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from lens 3 side A to telescope.
@@ -390,6 +413,7 @@ def m3a_into_tele(x_arr, y_arr, z_arr):
     y_rot1 = y_arr * np.cos(th1_l3) - z_arr * np.sin(th1_l3) - LENS3_Y
     z_rot1 = y_arr * np.sin(th1_l3) + z_arr * np.cos(th1_l3)
     return x_rot1, y_rot1, z_rot1
+
 
 def m3b_into_tele(x_arr, y_arr, z_arr):
     """
@@ -400,6 +424,7 @@ def m3b_into_tele(x_arr, y_arr, z_arr):
     z_rot2 = y_arr * np.sin(th2_l3) + z_arr * np.cos(th2_l3)
     return x_rot2, y_rot2, z_rot2
 
+
 def fp_into_tele(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from lens 3 side B to telescope.
@@ -408,6 +433,7 @@ def fp_into_tele(x_arr, y_arr, z_arr):
     y_rot2 = y_arr * np.cos(th2_l3) - z_arr * np.sin(th2_l3)
     z_rot2 = y_arr * np.sin(th2_l3) + z_arr * np.cos(th2_l3)
     return x_rot2, y_rot2, z_rot2
+
 
 def tele_into_f3(x_arr, y_arr, z_arr):
     """
@@ -420,6 +446,7 @@ def tele_into_f3(x_arr, y_arr, z_arr):
 
     return x_temp, y_temp, z_temp
 
+
 def tele_into_f1(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from telescope to filter 1.
@@ -430,6 +457,7 @@ def tele_into_f1(x_arr, y_arr, z_arr):
     z_temp = y_arr * np.sin(-th1_l3) + z_arr * np.cos(-th1_l3)
 
     return x_temp, y_temp, z_temp
+
 
 def tele_into_f2(x_arr, y_arr, z_arr):
     """
@@ -442,6 +470,7 @@ def tele_into_f2(x_arr, y_arr, z_arr):
 
     return x_temp, y_temp, z_temp
 
+
 def tele_into_m3a(x_arr, y_arr, z_arr):
     """
     Coordinate transformation from telescope to lens 3, side A.
@@ -452,6 +481,7 @@ def tele_into_m3a(x_arr, y_arr, z_arr):
     z_temp = y_arr * np.sin(-th1_l3) + z_arr * np.cos(-th1_l3)
 
     return x_temp, y_temp, z_temp
+
 
 def tele_into_m3b(x_arr, y_arr, z_arr):
     """
@@ -464,17 +494,20 @@ def tele_into_m3b(x_arr, y_arr, z_arr):
 
     return x_temp, y_temp, z_temp
 
+
 def z_lyot():
     """
     Surface shape of Lyot stop.
     """
     return 0
 
+
 def d_zlyot():
     """
     Normal vector on surface of Lyot.
     """
     return 0, 0
+
 
 def lyot_into_tele(x_arr, y_arr, z_arr):
     """
@@ -484,6 +517,7 @@ def lyot_into_tele(x_arr, y_arr, z_arr):
     y_rot1 = y_arr * np.cos(th1_l3) - z_arr * np.sin(th1_l3) - LYOT_Y
     z_rot1 = y_arr * np.sin(th1_l3) + z_arr * np.cos(th1_l3)
     return x_rot1, y_rot1, z_rot1
+
 
 def tele_into_lyot(x_arr, y_arr, z_arr):
     """
@@ -495,6 +529,7 @@ def tele_into_lyot(x_arr, y_arr, z_arr):
     z_temp = y_arr * np.sin(-th1_l3) + z_arr * np.cos(-th1_l3)
 
     return x_temp, y_temp, z_temp
+
 
 def plot_lenses():
     """
@@ -584,6 +619,7 @@ def plot_lenses():
         "-",
         color="k",
     )  # label="B3a"
+
 
 def filter_geo_new():
     """
