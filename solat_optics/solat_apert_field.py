@@ -5,6 +5,7 @@ path_to_package = "/home/chesmore/Desktop/Code/solat-optics"
 sys.path.append(path_to_package)
 
 import numpy as np
+
 # Holosim packages
 import pan_mod as pm
 from pan_mod import *
