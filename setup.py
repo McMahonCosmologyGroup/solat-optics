@@ -1,9 +1,6 @@
 import os
 from setuptools import setup, find_packages
 
-with open("requirements.txt") as requirements_txt:
-    install_requires = requirements_txt.read().splitlines()
-
 setup(
     name="solat_optics",
     version="0.1.1",
