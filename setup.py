@@ -1,5 +1,4 @@
-import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name="solat_optics",
@@ -9,6 +8,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Grace E. Chesmore, Alex Thomas, UChicago Lab",
     author_email="chesmore@uchicago.edu, agthomas@uchicago.edu",
-    packages=find_packages(exclude=["tests*"]),
+    packages=["solat_optics"],
+    package_dir={"solat_optics": "solat_optics"},
     install_requires=open("requirements.txt").read().splitlines()
 )
