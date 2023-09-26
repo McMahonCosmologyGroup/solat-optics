@@ -14,7 +14,7 @@ Author: Grace E. Chesmore
 
 1. `git clone git@github.com:McMahonCosmologyGroup/solat-optics.git`
 2. `cd solat_optics/`
-3. `python3 setup.py install --user`
+3. `pip3 install .`
 
 ## Tutorials
 Three tutorials are available as Jupyter notebooks:
